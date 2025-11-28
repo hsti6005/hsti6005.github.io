@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>群益證券：互動式電話話術流程圖 (賽博龐克風格)</title>
+    <style>
+        /* 賽博龐克配色與風格 V2.0 */
+        :root {
+            --bg-dark: #0f0f1d;
+            --bg-card: rgba(20, 20, 40, 0.85);
+            --neon-primary: #E03B8B; /* 主霓虹：電光紫/粉 */
+            --neon-secondary: #00FFFF; /* 副霓虹：冷光青 */
+            --text-light: #F0F8FF;
+            --btn-ok: #00FF90;
+            --btn-warn: #FFC300;
+        }
+
+        /* 全域設定 */
+        body { 
+            font-family: 'Consolas', 'Courier New', monospace, 'Microsoft YaHei', Tahoma, sans-serif;
+            color: var(--text-light);
+            margin: 0; padding: 0; 
+            /* 導入放射狀漸層背景 */
+            background: radial-gradient(circle at center, #1A1A2E 0%, #000000 100%);
+            background-attachment: fixed;
+            min-height: 100vh; /* 確保 body 覆蓋整個視窗，強化背景效果 */
+        }
+        .wrapper { 
+            display: flex; 
+            max-width: 1300px; 
+            margin: 20px auto; 
+            padding: 0 10px; /* 增加邊緣間距 */
+        }
+        #main-content { 
+            flex-grow: 1; 
+            padding: 30px; 
+            background-color: var(--bg-dark);
+            margin-right: 20px;
+            border-radius: 4px;
+        }
+
+        /* 標題樣式 */
+        h1 { 
+            color: var(--neon-secondary);
+            text-shadow: 0 0 5px var(--neon-secondary), 0 0 10px var(--neon-secondary);
+            border-bottom: 3px solid var(--neon-secondary); 
+            padding-bottom: 10px; margin-bottom: 40px; text-align: center; 
+        }
+
+        /* 步驟卡片 (話術框) */
+        .step-card { 
+            min-height: 450px; /* 固定高度 */
+            background-color: var(--bg-card); 
+            border: 2px solid var(--neon-primary); 
+            box-shadow: 0 0 5px var(--neon-primary), 0 0 15px var(--neon-primary);
+            padding: 25px; 
+            margin-bottom: 30px; 
+            border-radius: 4px; 
+            transition: all 0.3s ease-in-out;
+            display: flex; /* 使用 Flexbox 確保內容和按鈕定位 */
+            flex-direction: column;
+            justify-content: space-between; /* 將按鈕組推到底部 */
+        }
+        .step-title { 
+            font-size: 1.6em; 
+            color: var(--neon-secondary); 
+            font-weight: bold; 
+            margin-bottom: 15px; 
+            border-bottom: 1px dashed var(--neon-secondary);
+            padding-bottom: 5px;
+        }
+        .content { 
+            line-height: 1.8; 
+            font-size: 1.05em; 
+            flex-grow: 1; /* 讓內容區填滿剩餘空間 */
+        }
+
+        /* 樣式高亮 */
+        .highlight-main { 
+            color: var(--neon-primary); 
+            font-weight: bold; 
+            background-color: rgba(224, 59, 139, 0.15); 
+            padding: 3px 6px; 
+            border-radius: 2px;
+            border: 1px solid var(--neon-primary);
+        }
+        .highlight-secondary { color: var(--neon-secondary); font-weight: bold; }
+
+        /* 按鈕組 */
+        .button-group { margin-top: 25px; display: flex; gap: 15px; align-items: center; }
+        .decision-button {
+            padding: 12px 20px; border: none; border-radius: 4px; 
+            cursor: pointer; font-weight: bold; 
+            transition: background-color 0.2s, box-shadow 0.2s, transform 0.1s;
+            text-transform: uppercase;
+        }
+        .decision-button:hover {
+            box-shadow: 0 0 10px currentColor;
+            transform: scale(1.02);
+        }
+        .btn-yes { background-color: var(--btn-ok); color: var(--bg-dark); text-shadow: 0 0 4px #000; }
+        .btn-no { background-color: var(--btn-warn); color: var(--bg-dark); text-shadow: 0 0 4px #000; }
+        .btn-next { background-color: var(--neon-secondary); color: var(--bg-dark); text-shadow: 0 0 4px #000; }
+        .hidden { display: none; }
+        
+        /* 側邊欄 (Sidebar) */
+        #sidebar {
+            width: 250px;
+            padding: 20px;
+            position: sticky;
+            top: 20px;
+            min-height: 550px; /* 固定高度 */
+            background: linear-gradient(180deg, rgba(20, 20, 40, 1) 0%, rgba(30, 30, 60, 1) 100%);
+            border-radius: 4px;
+            border: 2px solid var(--neon-secondary);
+            box-shadow: 0 0 8px var(--neon-secondary);
+        }
+        #sidebar h2 {
+            color: var(--neon-secondary);
+            border-bottom: 2px solid var(--neon-secondary);
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            text-shadow: 0 0 5px var(--neon-secondary);
+        }
+        #sidebar ul { list-style: none; padding: 0; }
+        #sidebar li {
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 2px;
+            font-size: 1em;
+            color: var(--text-light);
+            background-color: rgba(44, 62, 80, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer; 
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        #sidebar li:hover {
+            background-color: rgba(44, 62, 80, 0.6);
+            box-shadow: 0 0 5px var(--neon-primary);
+        }
+        #sidebar li.active {
+            background-color: var(--neon-primary);
+            color: var(--bg-dark);
+            font-weight: bold;
+            box-shadow: 0 0 10px var(--neon-primary);
+            border: 1px solid var(--neon-primary);
+        }
+        .flow-end {
+            background-color: var(--neon-secondary);
+            color: var(--bg-dark) !important;
+            text-align: center;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 0 15px var(--neon-secondary);
+        }
+        
+        /* 響應式設計 (手機版適配) */
+        @media (max-width: 900px) {
+            .wrapper { 
+                flex-direction: column; 
+                margin: 0;
+            }
+            #sidebar {
+                position: static;
+                width: auto;
+                margin: 10px 10px 20px 10px;
+            }
+            #main-content {
+                margin: 10px 10px 0 10px;
+                padding: 15px;
+            }
+            .step-card {
+                min-height: 350px; /* 手機版略微降低高度 */
+            }
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .decision-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    
+    <div id="main-content">
+        <h1>[SYSTEM] 📞 TALKFLOW::INITIATED </h1>
+        <h2 id="subtitle" style="color: var(--neon-primary); font-size: 1.2em; text-align: center; margin-top: -30px; margin-bottom: 40px; text-shadow: 0 0 3px var(--neon-primary);">群益證券：互動式電話話術流程圖 (賽博龐克風格)</h2>
+        
+        <div id="step1" class="step-card" data-stage="stage1">
+            <div class="step-content-area">
+                <div class="step-title">STAGE 1: 確認資訊與活動內容</div>
+                <div class="content">
+                    <p><strong>[話術]：</strong>「您好，請問是 <span class="highlight-main">XXX</span> 先生/小姐嗎？我是**群益證券**營業員 <span class="highlight-main">YYY</span>。我這邊是專程來電，跟您確認**竹軒版主** <span class="highlight-main">12/6 (六) 下午 2:00</span> 講座的報名資訊。」</p>
+                    <p><strong>[話術-活動內容]：</strong>「這次竹軒版主主要是分享 **『2024 年第四季的投資策略佈局』** 跟 **『如何篩選低風險高報酬的潛力股』**，內容非常實用，想跟您確認一下，當天您會**準時出席**嗎？」</p>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="decision-button btn-yes" onclick="showStep('step2_yes')">CLIENT REPLY: ATTEND (Y)</button>
+                <button class="decision-button btn-no" onclick="showStep('step2_no')">CLIENT REPLY: CANNOT ATTEND (N)</button>
+            </div>
+        </div>
+
+        <div id="step2_yes" class="step-card hidden" data-stage="stage2">
+             <div class="step-content-area">
+                <div class="step-title">STAGE 2A: 標準優惠流程 (ATTENDANCE CONFIRMED)</div>
+                <div class="content">
+                    <p><strong>[應對]：</strong>「太好了。那也請您記得，當天報到時，**向櫃台報我的名字 $YYY$**，讓簽到更順暢。以下是版主專屬的開戶優惠細節。」</p>
+                    <p><strong>[話術-優惠]：</strong>「我們特別為竹軒版主的粉絲爭取到**專屬手續費方案**：首先，<strong>複委託手續費</strong>統一為 <span class="highlight-secondary">0.1\%</span>。其次，我們有時限優惠：只要您在 <span class="highlight-main">講座日 12/6 之前</span> 完成開戶，證券手續費就能享有<span class="highlight-main">最低 2 折</span>的優惠！此外，完成開戶就能參加 $5000$ 禮券**抽獎**，還能領取 $200$ 元**全家商品卡**。」</p>
+                </div>
+            </div>
+            <div class="button-group">
+                 <button class="decision-button btn-next" onclick="showStep('step3_interest')">FINISH OFFER (GOTO STAGE 3)</button>
+            </div>
+        </div>
+
+        <div id="step2_no" class="step-card hidden" data-stage="stage2">
+             <div class="step-content-area">
+                <div class="step-title">STAGE 2B: 無法出席 (RESERVATION & SERVICE)</div>
+                <div class="content">
+                    <p><strong>[應對]：</strong>「沒關係，真的很可惜您這次無法參加。不過，優惠權益還是要幫您保留。」</p>
+                    <p><strong>[話術-優惠]：</strong>「雖然無法參加，但**竹軒版主的專屬優惠**仍然有效，特別是 <span class="highlight-main">2折優惠</span>只到 **12/6**。我想先將開戶連結傳給您，您隨時有空可以先辦理，才不會錯過這個難得的低折數。」</p>
+                </div>
+            </div>
+            <div class="button-group">
+                 <button class="decision-button btn-next" onclick="showStep('step3_interest')">FINISH OFFER (GOTO STAGE 3)</button>
+            </div>
+        </div>
+        
+        <div id="step3_interest" class="step-card hidden" data-stage="stage3">
+             <div class="step-content-area">
+                <div class="step-title">STAGE 3: 詢問客戶意願 (INTEREST CHECK)</div>
+                <div class="content">
+                    <p><strong>[話術]：</strong>「請問您對這次的活動內容和專屬手續費方案有興趣嗎？」</p>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="decision-button btn-yes" onclick="showStep('step4_line_cta')">CLIENT REPLY: YES (INTERESTED)</button>
+                <button class="decision-button btn-no" onclick="showStep('step4_no_interest')">CLIENT REPLY: NO (NOT INTERESTED)</button>
+            </div>
+        </div>
+
+        <div id="step4_line_cta" class="step-card hidden" data-stage="stage4">
+             <div class="step-content-area">
+                <div class="step-title">STAGE 4A: 有興趣 -> 引導加 LINE (CTA)</div>
+                <div class="content">
+                    <p><strong>[話術]：</strong>「太好了！為了方便您接收**開戶連結和活動細節**，以及講座前一天發送提醒，請問我可以加您的 LINE 嗎？」</p>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="decision-button btn-yes" onclick="showStep('step5_yes')">CLIENT REPLY: AGREE TO LINE (Y)</button>
+                <button class="decision-button btn-no" onclick="showStep('step5_no')">CLIENT REPLY: NO LINE / EMAIL (N)</button>
+            </div>
+        </div>
+        
+        <div id="step4_no_interest" class="step-card hidden" data-stage="stage4">
+             <div class="step-content-area">
+                <div class="step-title">STAGE 4B: 沒興趣 (SOFT CLOSE / ALTERNATE CONTACT)</div>
+                <div class="content">
+                    <p><strong>[應對]：</strong>「沒關係，我了解，沒有壓力。不過我會將**竹軒版主的專屬開戶連結**和 <span class="highlight-secondary">0.1\% 複委託</span> 的詳細資訊傳給您，您未來有需要隨時都可以使用。」</p>
+                    <p><strong>[話術]：</strong>「為了避免簡訊遺失，我可以加您的 LINE 嗎？或是您希望我用 Email 寄出呢？」</p>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="decision-button btn-yes" onclick="showStep('step5_yes')">CLIENT REPLY: AGREE TO LINE (Y)</button>
+                <button class="decision-button btn-no" onclick="showStep('step5_no')">CLIENT REPLY: NO LINE / EMAIL (N)</button>
+            </div>
+        </div>
+
+
+        <div id="step5_yes" class="step-card hidden flow-end" data-stage="stage5">
+             <div class="step-content-area">
+                <div class="step-title">STAGE 5A: 最終收尾 (LINE SUCCESS)</div>
+                <div class="content">
+                    <p><strong>[話術]：</strong>「好的，麻煩您留意一下 LINE 上的好友邀請。我會馬上把**連結**和**提醒**傳給您。期待 <span class="highlight-main">12/6</span> 在講座上見到您。謝謝您！」</p>
+                    <p><strong>🎉 [TERMINATED] CONNECTION CLOSED 🎉</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="step5_no" class="step-card hidden flow-end" data-stage="stage5">
+             <div class="step-content-area">
+                <div class="step-title">STAGE 5B: 最終收尾 (NO LINE / EMAIL)</div>
+                <div class="content">
+                    <p><strong>[話術]：</strong>「沒問題，那我就不打擾您了。我會將連結和優惠說明簡訊/Email 給您，請您留意。再次提醒您，<span class="highlight-main">2折優惠只到 12/6</span> 喔。謝謝您！」</p>
+                    <p><strong>🎉 [TERMINATED] CONNECTION CLOSED 🎉</strong></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="sidebar">
+        <h2>FLOW STATUS::ONLINE</h2>
+        <ul id="flow-nav">
+            <li id="nav-stage1" onclick="jumpToStage('step1')">1. 確認資訊 (INIT)</li>
+            <li id="nav-stage2" onclick="jumpToStage('step2_yes')">2. 優惠說明 (OFFER)</li>
+            <li id="nav-stage3" onclick="jumpToStage('step3_interest')">3. 意願確認 (CHECK)</li>
+            <li id="nav-stage4" onclick="jumpToStage('step4_line_cta')">4. 引導服務 (CTA)</li>
+            <li id="nav-stage5" onclick="jumpToStage('step5_yes')">5. 最終收尾 (CLOSE)</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    // 優化: 將所有步驟 ID 放在一個陣列中，避免重複查詢 DOM
+    const ALL_STEP_IDS = [
+        'step1', 'step2_yes', 'step2_no', 'step3_interest', 
+        'step4_line_cta', 'step4_no_interest', 'step5_yes', 'step5_no'
+    ];
+
+    const STAGE_MAP = {
+        'step1': 'nav-stage1',
+        'step2_yes': 'nav-stage2', 'step2_no': 'nav-stage2',
+        'step3_interest': 'nav-stage3',
+        'step4_line_cta': 'nav-stage4', 'step4_no_interest': 'nav-stage4',
+        'step5_yes': 'nav-stage5', 'step5_no': 'nav-stage5'
+    };
+
+    // JS 函數：更新側邊導航欄的狀態
+    function updateSidebar(currentStepId) {
+        const currentStageId = STAGE_MAP[currentStepId];
+        const allNavItems = document.querySelectorAll('#flow-nav li');
+        
+        allNavItems.forEach(item => {
+            item.classList.remove('active');
+        });
+
+        const activeNavItem = document.getElementById(currentStageId);
+        if (activeNavItem) {
+            activeNavItem.classList.add('active');
+        }
+    }
+
+    // JS 函數：控制步驟的顯示與隱藏
+    function showStep(stepId) {
+        // 隱藏所有步驟
+        ALL_STEP_IDS.forEach(id => {
+            const step = document.getElementById(id);
+            if (step) {
+                step.classList.add('hidden');
+            }
+        });
+
+        // 顯示目標步驟
+        const targetStep = document.getElementById(stepId);
+        if (targetStep) {
+            targetStep.classList.remove('hidden');
+        }
+
+        updateSidebar(stepId);
+    }
+
+    // JS 函數：點擊側邊欄跳轉 (與 showStep 相同功能，但命名不同，用於 HTML 內聯事件)
+    function jumpToStage(targetStepId) {
+        showStep(targetStepId); 
+    }
+
+    // 初始化：確保頁面加載時只顯示 step1
+    document.addEventListener('DOMContentLoaded', () => {
+        showStep('step1'); 
+    });
+</script>
+
+</body>
+</html>
